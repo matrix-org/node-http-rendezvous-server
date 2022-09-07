@@ -19,7 +19,7 @@ import { createHash } from 'crypto';
 
 import { maxBytes } from './config';
 
-export class Channel {
+export class Rendezvous {
     private readonly id: string;
     private readonly expiresAt: Date;
     readonly ttlSeconds: number;
