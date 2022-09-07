@@ -1,0 +1,47 @@
+{
+  "name": "node-http-rendezvous",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "author": "The Matrix.org Foundation C.I.C.",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "node-cache": "^5.1.2",
+    "uuid": "^8.3.2"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "start": "node dist/index.js",
+    "build": "yarn clean && tsc --skipLibCheck",
+    "dev": "nodemon -e .ts -w . --exec 'ts-node src/index.ts'",
+    "dev:https": "nodemon -e .ts -w . --exec 'DEV_SSL=yes ts-node src/index.ts'",
+    "lint": "yarn lint:types && yarn lint:style",
+    "lint:style": "eslint src",
+    "lint:types": "tsc --noEmit --skipLibCheck",
+    "test": "yarn lint",
+    "release": "yarn semantic-release"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.0.2",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@eclass/semantic-release-docker": "^3.0.1",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "eslint": "^7.24.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-matrix-org": "github:matrix-org/eslint-plugin-matrix-org",
+    "husky": "^7.0.4",
+    "nodemon": "^2.0.18",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  }
+}
