@@ -35,8 +35,10 @@ jobs:
           cache: npm
       - name: Install deps
         run: yarn install
-      - name: Build
+      - name: TS build
         run: yarn build
+      - name: Docker build
+        run: docker build .
 
   release:
     name: Semantic release
@@ -55,6 +57,8 @@ jobs:
           cache: npm
       - name: Install deps
         run: yarn install
+      - name: Docker build
+        run: docker build . -t node-http-rendezvous-server
       - name: Release
         run: yarn release
         env:
