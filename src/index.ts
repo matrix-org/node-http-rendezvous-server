@@ -28,7 +28,7 @@ import { Rendezvous } from './rendezvous';
 import { maxBytes, ttlSeconds, port } from './config';
 
 const app = express();
-app.use(cors({ exposedHeaders: ['ETag'] }));
+app.use(cors({ exposedHeaders: ['ETag', 'Location'] }));
 app.use(morgan('common'));
 app.set('env', 'production');
 app.set('x-powered-by', false);
@@ -56,7 +56,10 @@ app.post('/', (req, res) => {
 
     rv.setHeaders(res);
 
-    return res.status(200).json(rv.json());
+    res.setHeader('Location', id);
+    res.setHeader('X-Max-Bytes', maxBytes);
+
+    return res.sendStatus(201);
 });
 
 app.put('/:id', (req, res) => {

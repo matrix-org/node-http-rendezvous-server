@@ -17,8 +17,6 @@ limitations under the License.
 import express from 'express';
 import { createHash } from 'crypto';
 
-import { maxBytes } from './config';
-
 export class Rendezvous {
     private readonly id: string;
     private readonly expiresAt: Date;
@@ -67,12 +65,5 @@ export class Rendezvous {
         res.setHeader('ETag', this.etag);
         res.setHeader('Expires', this.expiresAt.toUTCString());
         res.setHeader('Last-Modified', this.lastModified.toUTCString());
-    }
-
-    json() {
-        return {
-            id: this.id,
-            max_bytes: maxBytes,
-        };
     }
 }
