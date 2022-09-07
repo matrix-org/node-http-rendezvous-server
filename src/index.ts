@@ -24,7 +24,7 @@ import http from 'http';
 import https from 'https';
 import { readFileSync } from 'fs';
 
-import { Channel } from './channel';
+import { Rendezvous } from './rendezvous';
 import { maxBytes, ttlSeconds, port } from './config';
 
 const app = express();
@@ -41,78 +41,78 @@ app.use(bodyParser.raw({
     limit: maxBytes,
 }));
 
-const channels = new NodeCache({
+const rvs = new NodeCache({
     checkperiod: 60,
     useClones: false,
 });
 
 app.post('/', (req, res) => {
     let id: string | undefined;
-    while (!id || id in channels) {
+    while (!id || id in rvs) {
         id = v4();
     }
-    const channel = new Channel(id, ttlSeconds, maxBytes, req);
-    channels.set(id, channel, channel.ttlSeconds);
+    const rv = new Rendezvous(id, ttlSeconds, maxBytes, req);
+    rvs.set(id, rv, rv.ttlSeconds);
 
-    channel.setHeaders(res);
+    rv.setHeaders(res);
 
-    return res.status(200).json(channel.json());
+    return res.status(200).json(rv.json());
 });
 
 app.put('/:id', (req, res) => {
     const { id } = req.params;
-    const channel = channels.get<Channel>(id);
+    const rv = rvs.get<Rendezvous>(id);
 
-    if (!channel) {
+    if (!rv) {
         return res.sendStatus(404);
     }
 
-    if (channel.expired()) {
-        channels.del(id);
+    if (rv.expired()) {
+        rvs.del(id);
         return res.sendStatus(404);
     }
 
     const ifMatch = req.headers['if-match'];
 
-    if (ifMatch && ifMatch !== channel.etag) {
-        channel.setHeaders(res);
+    if (ifMatch && ifMatch !== rv.etag) {
+        rv.setHeaders(res);
         return res.sendStatus(412);
     }
 
-    channel.update(req);
-    channel.setHeaders(res);
+    rv.update(req);
+    rv.setHeaders(res);
 
     return res.sendStatus(202);
 });
 
 app.get('/:id', (req, res) => {
     const { id } = req.params;
-    const channel = channels.get<Channel>(id);
+    const rv = rvs.get<Rendezvous>(id);
 
-    if (!channel) {
+    if (!rv) {
         return res.sendStatus(404);
     }
 
-    if (channel.expired()) {
-        channels.del(id);
+    if (rv.expired()) {
+        rvs.del(id);
         return res.sendStatus(404);
     }
 
-    channel.setHeaders(res);
+    rv.setHeaders(res);
 
-    if (req.headers['if-none-match'] === channel.etag) {
+    if (req.headers['if-none-match'] === rv.etag) {
         return res.sendStatus(304);
     }
 
-    return channel.sendData(res);
+    return rv.sendData(res);
 });
 
 app.delete('/:id', (req, res) => {
     const { id } = req.params;
-    if (!channels.has(id)) {
+    if (!rvs.has(id)) {
         return res.sendStatus(404);
     }
-    channels.del(id);
+    rvs.del(id);
     return res.sendStatus(204);
 });
 
