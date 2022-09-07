@@ -5,10 +5,10 @@ module.exports = {
         '@semantic-release/release-notes-generator',
         '@semantic-release/changelog',
         ['@eclass/semantic-release-docker', {
-            'baseImageName': 'node-http-rendezvous',
+            'baseImageName': 'node-http-rendezvous-server',
             'registries': [{
                 'url': 'ghcr.io',
-                'imageName': 'ghcr.io/matrix-org/node-http-rendezvous',
+                'imageName': 'ghcr.io/matrix-org/node-http-rendezvous-server',
                 'user': 'GITHUB_USER',
                 'password': 'GITHUB_TOKEN',
             }],

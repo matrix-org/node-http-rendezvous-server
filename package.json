@@ -1,5 +1,5 @@
 {
-  "name": "node-http-rendezvous",
+  "name": "@matrix-org/node-http-rendezvous-server",
   "version": "0.0.1",
   "license": "Apache-2.0",
   "author": "The Matrix.org Foundation C.I.C.",
