@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.0.1...v2.0.2) (2022-09-09)
+
+
+### Bug Fixes
+
+* expose X-Max-Bytes and make allowed headers explicit ([f4f0526](https://github.com/matrix-org/node-http-rendezvous-server/commit/f4f0526b03de57656e2055958d5e1ce7c30a20de))
+
 ## [2.0.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.0.0...v2.0.1) (2022-09-09)
 
 
