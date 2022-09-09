@@ -40,7 +40,11 @@ export class Rendezvous {
         this.data = req.body;
         this.contentType = req.get('Content-Type') ?? 'application/octet-stream';
         this.lastModified = new Date();
-        const hash = createHash('sha256').update(this.id);
+        const hash = createHash('sha256');
+        // include ID so that it is rendezvous-specific
+        hash.update(this.id);
+        // we include last modified so that if both sides post identical data then they will hopefully still hash differently:
+        hash.update(this.lastModified.toISOString());
         if (Buffer.isBuffer(this.data)) {
             hash.update(this.data);
         }
