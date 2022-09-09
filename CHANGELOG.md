@@ -1,3 +1,11 @@
+## [2.0.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.0.0...v2.0.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* include last-modified time in etag calculation ([063cef2](https://github.com/matrix-org/node-http-rendezvous-server/commit/063cef2f8d54682269ffce2c2e70bbfa7d2208ea))
+* respect RZ_PORT environment variable ([2b982b2](https://github.com/matrix-org/node-http-rendezvous-server/commit/2b982b289331acb2504819aab26ffcd90e97eefe))
+
 # [2.0.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v1.0.0...v2.0.0) (2022-09-07)
 
 
