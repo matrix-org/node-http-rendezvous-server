@@ -28,7 +28,10 @@ import { Rendezvous } from './rendezvous';
 import { maxBytes, ttlSeconds, port } from './config';
 
 const app = express();
-app.use(cors({ exposedHeaders: ['ETag', 'Location'] }));
+app.use(cors({
+    allowedHeaders: ['Content-Type', 'If-Match', 'If-None-Match'],
+    exposedHeaders: ['ETag', 'Location', 'X-Max-Bytes'],
+}));
 app.use(morgan('common'));
 app.set('env', 'production');
 app.set('x-powered-by', false);
