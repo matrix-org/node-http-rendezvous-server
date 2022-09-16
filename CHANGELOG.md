@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.0.2...v2.1.0) (2022-09-16)
+
+
+### Features
+
+* add /health endpoint ([51879b1](https://github.com/matrix-org/node-http-rendezvous-server/commit/51879b12c32f670c4385ec9dd816704d892ce700))
+
 ## [2.0.2](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.0.1...v2.0.2) (2022-09-09)
 
 
