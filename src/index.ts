@@ -44,6 +44,8 @@ app.use(bodyParser.raw({
     limit: maxBytes,
 }));
 
+app.get('/health', (req, res) => res.status(200).send('OK'));
+
 const rvs = new NodeCache({
     checkperiod: 60,
     useClones: false,
