@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.1.0...v2.1.1) (2023-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump json5 from 1.0.1 to 1.0.2 ([#1](https://github.com/matrix-org/node-http-rendezvous-server/issues/1)) ([f3d9f74](https://github.com/matrix-org/node-http-rendezvous-server/commit/f3d9f74336679dc3dd2476e50fb7c21d51c95110))
+
 # [2.1.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.0.2...v2.1.0) (2022-09-16)
 
 
