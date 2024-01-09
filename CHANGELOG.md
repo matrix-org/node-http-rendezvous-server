@@ -1,3 +1,15 @@
+# [2.2.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.1.1...v2.2.0) (2024-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump http-cache-semantics from 4.1.0 to 4.1.1 ([#2](https://github.com/matrix-org/node-http-rendezvous-server/issues/2)) ([84fb13e](https://github.com/matrix-org/node-http-rendezvous-server/commit/84fb13e462af34949af92b9d769995c3a9e432f6))
+
+
+### Features
+
+* upgrade to Node.js 20 ([#4](https://github.com/matrix-org/node-http-rendezvous-server/issues/4)) ([5adc2e3](https://github.com/matrix-org/node-http-rendezvous-server/commit/5adc2e33dd1f0ad401ddffd7ffa97e2d9f3e458f)), closes [#5](https://github.com/matrix-org/node-http-rendezvous-server/issues/5)
+
 ## [2.1.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.1.0...v2.1.1) (2023-01-09)
 
 
