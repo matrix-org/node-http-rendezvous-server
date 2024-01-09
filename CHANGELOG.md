@@ -1,3 +1,11 @@
+## [2.2.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.2.0...v2.2.1) (2024-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump semver from 5.7.1 to 5.7.2 ([#6](https://github.com/matrix-org/node-http-rendezvous-server/issues/6)) ([12a3457](https://github.com/matrix-org/node-http-rendezvous-server/commit/12a3457e301e6fb334a812bb3bb764a75823bb8b))
+* **deps:** upgrade nodemon to 3.0.2 ([fe52f28](https://github.com/matrix-org/node-http-rendezvous-server/commit/fe52f28722126a6f1c5c3c44d5e55459329165bd))
+
 # [2.2.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.1.1...v2.2.0) (2024-01-09)
 
 
