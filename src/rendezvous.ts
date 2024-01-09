@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import express from 'express';
-import { createHash } from 'crypto';
+import express from "express";
+import { createHash } from "crypto";
 
 export class Rendezvous {
     private readonly id: string;
     private readonly expiresAt: Date;
-    readonly ttlSeconds: number;
+    public readonly ttlSeconds: number;
     private readonly maxBytes: number;
     private data?: Buffer;
     private contentType!: string;
     private lastModified!: Date;
-    etag!: string;
+    public etag!: string;
 
-    constructor(id: string, ttlSeconds: number, maxBytes: number, initialRequest: express.Request) {
+    public constructor(id: string, ttlSeconds: number, maxBytes: number, initialRequest: express.Request) {
         const now = new Date();
         this.id = id;
         this.ttlSeconds = ttlSeconds;
@@ -36,11 +36,11 @@ export class Rendezvous {
         this.update(initialRequest);
     }
 
-    update(req: express.Request) {
+    public update(req: express.Request): void {
         this.data = req.body;
-        this.contentType = req.get('Content-Type') ?? 'application/octet-stream';
+        this.contentType = req.get("Content-Type") ?? "application/octet-stream";
         this.lastModified = new Date();
-        const hash = createHash('sha256');
+        const hash = createHash("sha256");
         // include ID so that it is rendezvous-specific
         hash.update(this.id);
         // we include last modified so that if both sides post identical data then they will hopefully still hash differently:
@@ -48,26 +48,26 @@ export class Rendezvous {
         if (Buffer.isBuffer(this.data)) {
             hash.update(this.data);
         }
-        this.etag = hash.digest('base64');
+        this.etag = hash.digest("base64");
     }
 
-    sendData(res: express.Response): void {
+    public sendData(res: express.Response): void {
         res.status(200);
-        res.setHeader('Content-Type', this.contentType);
+        res.setHeader("Content-Type", this.contentType);
         if (Buffer.isBuffer(this.data)) {
             res.send(this.data);
         } else {
-            res.send('');
+            res.send("");
         }
     }
 
-    expired(): boolean {
+    public expired(): boolean {
         return this.expiresAt < new Date();
     }
 
-    setHeaders(res: express.Response): void {
-        res.setHeader('ETag', this.etag);
-        res.setHeader('Expires', this.expiresAt.toUTCString());
-        res.setHeader('Last-Modified', this.lastModified.toUTCString());
+    public setHeaders(res: express.Response): void {
+        res.setHeader("ETag", this.etag);
+        res.setHeader("Expires", this.expiresAt.toUTCString());
+        res.setHeader("Last-Modified", this.lastModified.toUTCString());
     }
 }
