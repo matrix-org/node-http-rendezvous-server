@@ -1,3 +1,11 @@
+## [2.2.2](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.2.1...v2.2.2) (2024-04-05)
+
+
+### Bug Fixes
+
+* **deps:** bump express from 4.18.1 to 4.19.2 ([#8](https://github.com/matrix-org/node-http-rendezvous-server/issues/8)) ([35a1112](https://github.com/matrix-org/node-http-rendezvous-server/commit/35a1112d3390ad449f7917b737dbe9b7a4d8cb43))
+* **deps:** bump ip from 2.0.0 to 2.0.1 ([#7](https://github.com/matrix-org/node-http-rendezvous-server/issues/7)) ([380a62e](https://github.com/matrix-org/node-http-rendezvous-server/commit/380a62e5594ea34464fe25490df5ed72075c15df))
+
 ## [2.2.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.2.0...v2.2.1) (2024-01-09)
 
 
