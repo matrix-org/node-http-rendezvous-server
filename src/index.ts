@@ -49,13 +49,6 @@ const rvs = new NodeCache({
     useClones: false,
 });
 
-app.options("/", cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["X-Requested-With", "Content-Type", "Authorization"], // https://spec.matrix.org/v1.10/client-server-api/#web-browser-clients
-    exposedHeaders: ["ETag"],
-}));
-
 function notFound(res: express.Response): express.Response {
     return res.status(404).json({ "errcode": "M_NOT_FOUND", "error": "Rendezvous not found" });
 }
@@ -74,7 +67,16 @@ function withContentType(req: express.Request, res: express.Response) {
         return fn(contentType);
     };
 }
-app.post("/", (req, res) => {
+
+const postCors = cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["X-Requested-With", "Content-Type", "Authorization"], // https://spec.matrix.org/v1.10/client-server-api/#web-browser-clients
+    exposedHeaders: ["ETag"],
+});
+
+app.options("/", postCors);
+app.post("/", postCors, (req, res) => {
     withContentType(req, res)((contentType) => {
 
         let id: string | undefined;
@@ -92,14 +94,15 @@ app.post("/", (req, res) => {
     });
 });
 
-app.options("/:id", cors({
+const sessionCors = cors({
     origin: "*",
     methods: ["GET", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["If-Match", "If-None-Match"],
     exposedHeaders: ["ETag"],
-}));
+});
 
-app.put("/:id", (req, res) => {
+app.options("/:id", sessionCors);
+app.put("/:id", sessionCors, (req, res) => {
     withContentType(req, res)((contentType) => {
         const { id } = req.params;
         const rv = rvs.get<Rendezvous>(id);
@@ -128,7 +131,7 @@ app.put("/:id", (req, res) => {
     });
 });
 
-app.get("/:id", (req, res) => {
+app.get("/:id", sessionCors, (req, res) => {
     const { id } = req.params;
     const rv = rvs.get<Rendezvous>(id);
 
@@ -150,7 +153,7 @@ app.get("/:id", (req, res) => {
     return rv.sendData(res);
 });
 
-app.delete("/:id", (req, res) => {
+app.delete("/:id", sessionCors, (req, res) => {
     const { id } = req.params;
     if (!rvs.has(id)) {
         return notFound(res);
