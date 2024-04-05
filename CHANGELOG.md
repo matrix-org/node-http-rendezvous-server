@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v3.0.0...v3.0.1) (2024-04-05)
+
+
+### Bug Fixes
+
+* return CORS headers with non-OPTIONS responses ([6adf872](https://github.com/matrix-org/node-http-rendezvous-server/commit/6adf872035f73b705be85a9b38af140dcfef2021))
+
 # [3.0.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.2.2...v3.0.0) (2024-04-05)
 
 
