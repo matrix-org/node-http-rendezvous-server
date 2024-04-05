@@ -1,3 +1,17 @@
+# [3.0.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.2.2...v3.0.0) (2024-04-05)
+
+
+### Features
+
+* support for MSC4108 rendezvous protocol ([#9](https://github.com/matrix-org/node-http-rendezvous-server/issues/9)) ([5ac3f34](https://github.com/matrix-org/node-http-rendezvous-server/commit/5ac3f3488af6f5c48b00c37704774efd390c7fe0))
+
+
+### BREAKING CHANGES
+
+* support for MSC3886 has been dropped
+
+Bumped all dependencies
+
 ## [2.2.2](https://github.com/matrix-org/node-http-rendezvous-server/compare/v2.2.1...v2.2.2) (2024-04-05)
 
 
