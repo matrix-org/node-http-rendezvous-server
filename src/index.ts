@@ -23,19 +23,17 @@ import cors from "cors";
 import http from "http";
 import https from "https";
 import { readFileSync } from "fs";
+import { parse as parseContentType } from "content-type";
 
 import { Rendezvous } from "./rendezvous";
-import { maxBytes, ttlSeconds, port } from "./config";
+import { maxBytes, ttlSeconds, port, trustProxy } from "./config";
 
 const app = express();
-app.use(cors({
-    allowedHeaders: ["Content-Type", "If-Match", "If-None-Match"],
-    exposedHeaders: ["ETag", "Location", "X-Max-Bytes"],
-}));
 app.use(morgan("common"));
 app.set("env", "production");
 app.set("x-powered-by", false);
 app.set("etag", false);
+app.set("trust proxy", trustProxy);
 
 // treat everything as raw
 app.use(bodyParser.raw({
@@ -51,46 +49,83 @@ const rvs = new NodeCache({
     useClones: false,
 });
 
+app.options("/", cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["X-Requested-With", "Content-Type", "Authorization"], // https://spec.matrix.org/v1.10/client-server-api/#web-browser-clients
+    exposedHeaders: ["ETag"],
+}));
+
+function notFound(res: express.Response): express.Response {
+    return res.status(404).json({ "errcode": "M_NOT_FOUND", "error": "Rendezvous not found" });
+}
+
+function withContentType(req: express.Request, res: express.Response) {
+    return (fn: (contentType: string) => express.Response): express.Response => {
+        const contentType = req.get("content-type");
+        if (!contentType) {
+            return res.status(400).json({ "errcode": "M_MISSING_PARAM", "error": "Missing Content-Type header" });
+        }
+        try {
+            parseContentType(contentType);
+        } catch (e) {
+            return res.status(400).json({ "errcode": "M_INVALID_PARAM", "error": "Invalid Content-Type header" });
+        }
+        return fn(contentType);
+    };
+}
 app.post("/", (req, res) => {
-    let id: string | undefined;
-    while (!id || id in rvs) {
-        id = v4();
-    }
-    const rv = new Rendezvous(id, ttlSeconds, maxBytes, req);
-    rvs.set(id, rv, rv.ttlSeconds);
+    withContentType(req, res)((contentType) => {
 
-    rv.setHeaders(res);
+        let id: string | undefined;
+        while (!id || id in rvs) {
+            id = v4();
+        }
+        const rv = new Rendezvous(id, ttlSeconds, maxBytes, req.body, contentType);
+        rvs.set(id, rv, rv.ttlSeconds);
 
-    res.setHeader("Location", id);
-    res.setHeader("X-Max-Bytes", maxBytes);
+        rv.setHeaders(res);
 
-    return res.sendStatus(201);
+        const url = `${req.protocol}://${req.hostname}/${id}`;
+
+        return res.status(201).json({ url });
+    });
 });
 
+app.options("/:id", cors({
+    origin: "*",
+    methods: ["GET", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["If-Match", "If-None-Match"],
+    exposedHeaders: ["ETag"],
+}));
+
 app.put("/:id", (req, res) => {
-    const { id } = req.params;
-    const rv = rvs.get<Rendezvous>(id);
+    withContentType(req, res)((contentType) => {
+        const { id } = req.params;
+        const rv = rvs.get<Rendezvous>(id);
 
-    if (!rv) {
-        return res.sendStatus(404);
-    }
+        if (!rv) {
+            return notFound(res);
+        }
 
-    if (rv.expired()) {
-        rvs.del(id);
-        return res.sendStatus(404);
-    }
+        if (rv.expired()) {
+            rvs.del(id);
+            return notFound(res);
+        }
 
-    const ifMatch = req.headers["if-match"];
+        const ifMatch = req.headers["if-match"];
+        if (!ifMatch) {
+            return res.status(400).json({ "errcode": "M_MISSING_PARAM", "error": "Missing If-Match header" });
+        } else if (ifMatch !== rv.etag) {
+            rv.setHeaders(res);
+            return res.send(412).json({ "errcode": "M_CONCURRENT_WRITE", "error": "Rendezvous has been modified" });
+        }
 
-    if (ifMatch && ifMatch !== rv.etag) {
+        rv.update(req.body, contentType);
         rv.setHeaders(res);
-        return res.sendStatus(412);
-    }
 
-    rv.update(req);
-    rv.setHeaders(res);
-
-    return res.sendStatus(202);
+        return res.sendStatus(202);
+    });
 });
 
 app.get("/:id", (req, res) => {
@@ -98,12 +133,12 @@ app.get("/:id", (req, res) => {
     const rv = rvs.get<Rendezvous>(id);
 
     if (!rv) {
-        return res.sendStatus(404);
+        return notFound(res);
     }
 
     if (rv.expired()) {
         rvs.del(id);
-        return res.sendStatus(404);
+        return notFound(res);
     }
 
     rv.setHeaders(res);
@@ -118,7 +153,7 @@ app.get("/:id", (req, res) => {
 app.delete("/:id", (req, res) => {
     const { id } = req.params;
     if (!rvs.has(id)) {
-        return res.sendStatus(404);
+        return notFound(res);
     }
     rvs.del(id);
     return res.sendStatus(204);
@@ -130,11 +165,11 @@ if (process.env.DEV_SSL === "yes") {
         cert: readFileSync("./devssl/cert.pem"),
     }, app);
     httpsServer.listen(port, () => {
-        console.log(`Starting rendezvous server at https://0.0.0.0:${port} with self-signed certificate`);
+        console.log(`Starting rendezvous server at https://0.0.0.0:${port} with self-signed certificate${trustProxy ? " behind trusted proxy" : ""}`);
     });
 } else {
     const httpServer = http.createServer(app);
     httpServer.listen(port, () => {
-        console.log(`Starting rendezvous server at http://0.0.0.0:${port}`);
+        console.log(`Starting rendezvous server at http://0.0.0.0:${port}${trustProxy ? " behind trusted proxy" : ""}`);
     });
 }

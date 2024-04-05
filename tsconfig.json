@@ -13,9 +13,9 @@
         "strictNullChecks": true,
         "noImplicitReturns": true,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
         "forceConsistentCasingInFileNames": true,
         "outDir": "./dist",
         "rootDir": "./src"
-    }
+    },
+    "include": ["src/**/*"]
 }

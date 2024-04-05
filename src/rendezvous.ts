@@ -27,18 +27,18 @@ export class Rendezvous {
     private lastModified!: Date;
     public etag!: string;
 
-    public constructor(id: string, ttlSeconds: number, maxBytes: number, initialRequest: express.Request) {
+    public constructor(id: string, ttlSeconds: number, maxBytes: number, data: Buffer, contentType: string) {
         const now = new Date();
         this.id = id;
         this.ttlSeconds = ttlSeconds;
         this.expiresAt = new Date(now.getTime() + ttlSeconds * 1000);
         this.maxBytes = maxBytes;
-        this.update(initialRequest);
+        this.update(data, contentType);
     }
 
-    public update(req: express.Request): void {
-        this.data = req.body;
-        this.contentType = req.get("Content-Type") ?? "application/octet-stream";
+    public update(data: Buffer, contentType: string): void {
+        this.data = data;
+        this.contentType = contentType;
         this.lastModified = new Date();
         const hash = createHash("sha256");
         // include ID so that it is rendezvous-specific
