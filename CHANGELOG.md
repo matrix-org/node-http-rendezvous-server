@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v3.0.1...v3.1.0) (2024-04-09)
+
+
+### Features
+
+* set `Cache-Control` and `Pragma` headers ([0971868](https://github.com/matrix-org/node-http-rendezvous-server/commit/0971868f5be341998f77805a671ccfee1a8affa7))
+
 ## [3.0.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v3.0.0...v3.0.1) (2024-04-05)
 
 
