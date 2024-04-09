@@ -69,5 +69,7 @@ export class Rendezvous {
         res.setHeader("ETag", this.etag);
         res.setHeader("Expires", this.expiresAt.toUTCString());
         res.setHeader("Last-Modified", this.lastModified.toUTCString());
+        res.setHeader("Cache-Control", "no-store");
+        res.setHeader("Pragma", "no-cache");
     }
 }
