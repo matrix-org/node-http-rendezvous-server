@@ -1,3 +1,17 @@
+# [3.2.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v3.1.0...v3.2.0) (2024-04-23)
+
+
+### Bug Fixes
+
+* if not trusting proxy then put port in returned URL ([065952c](https://github.com/matrix-org/node-http-rendezvous-server/commit/065952c335547c1a929c276cd2c59b3f88f892c0))
+
+
+### Features
+
+* require content-type of text/plain ([632e52a](https://github.com/matrix-org/node-http-rendezvous-server/commit/632e52ab0e79486609e972cab646a6078ecaa061))
+* set default maximum payload size to 4KB ([03350b6](https://github.com/matrix-org/node-http-rendezvous-server/commit/03350b68e36c254d2a6fab4d959046916830ecb8))
+* use unstable errcode prefix for M_CONCURRENT_WRITE ([4d0d8e3](https://github.com/matrix-org/node-http-rendezvous-server/commit/4d0d8e39f07a7630bfa1d30e594b7adb91b73345))
+
 # [3.1.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v3.0.1...v3.1.0) (2024-04-09)
 
 
