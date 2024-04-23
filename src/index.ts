@@ -118,7 +118,7 @@ app.put("/:id", sessionCors, (req, res) => {
             return res.status(400).json({ "errcode": "M_MISSING_PARAM", "error": "Missing If-Match header" });
         } else if (ifMatch !== rv.etag) {
             rv.setHeaders(res);
-            return res.send(412).json({ "errcode": "M_CONCURRENT_WRITE", "error": "Rendezvous has been modified" });
+            return res.send(412).json({ "errcode": "M_UNKNOWN", "org.matrix.msc4108.errcode": "M_CONCURRENT_WRITE", "error": "Rendezvous has been modified" });
         }
 
         rv.update(req.body, contentType);
