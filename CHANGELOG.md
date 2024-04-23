@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/matrix-org/node-http-rendezvous-server/compare/v3.2.0...v3.2.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* return error body with 412 response ([ecc8037](https://github.com/matrix-org/node-http-rendezvous-server/commit/ecc80372cad9dd56defda77065ce840675a39352))
+
 # [3.2.0](https://github.com/matrix-org/node-http-rendezvous-server/compare/v3.1.0...v3.2.0) (2024-04-23)
 
 
