@@ -85,7 +85,7 @@ app.post("/", postCors, (req, res) => {
 
         rv.setHeaders(res);
 
-        const url = `${req.protocol}://${req.hostname}/${id}`;
+        const url = `${req.protocol}://${req.hostname}${trustProxy ? "" : `:${port}`}/${id}`;
 
         return res.status(201).json({ url });
     });
