@@ -23,7 +23,6 @@ import cors from "cors";
 import http from "http";
 import https from "https";
 import { readFileSync } from "fs";
-import { parse as parseContentType } from "content-type";
 
 import { Rendezvous } from "./rendezvous";
 import { maxBytes, ttlSeconds, port, trustProxy } from "./config";
@@ -59,9 +58,7 @@ function withContentType(req: express.Request, res: express.Response) {
         if (!contentType) {
             return res.status(400).json({ "errcode": "M_MISSING_PARAM", "error": "Missing Content-Type header" });
         }
-        try {
-            parseContentType(contentType);
-        } catch (e) {
+        if (contentType !== "text/plain") {
             return res.status(400).json({ "errcode": "M_INVALID_PARAM", "error": "Invalid Content-Type header" });
         }
         return fn(contentType);
